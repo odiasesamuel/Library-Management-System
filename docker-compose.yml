@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: library-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: library-management-system
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - library-system-net
+
+volumes:
+  postgres_data:
+
+networks:
+  library-system-net:
