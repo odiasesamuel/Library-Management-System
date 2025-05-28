@@ -13,10 +13,11 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "books")
 public class Book {
     @Id
-    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+    @SequenceGenerator(name = "book_sequence", sequenceName = "book_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_sequence")
     private Long id;
 
     private String title;
@@ -27,7 +28,7 @@ public class Book {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    private String avaliableCopies;
+    private String availableCopies;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<BorrowRecord> borrowRecords;

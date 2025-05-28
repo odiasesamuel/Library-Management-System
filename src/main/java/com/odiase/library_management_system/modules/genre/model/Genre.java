@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "genres")
 public class Genre {
     @Id
     @SequenceGenerator(name = "genre_sequence", sequenceName = "genre_sequence", allocationSize = 1)

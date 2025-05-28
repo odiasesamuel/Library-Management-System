@@ -15,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "borrow_records")
 public class BorrowRecord {
     @Id
     @SequenceGenerator(name = "borrow_sequence", sequenceName = "borrow_sequence", allocationSize = 1)
