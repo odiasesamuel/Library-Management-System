@@ -1,7 +1,7 @@
-package com.odiase.library_management_system.modules.user.model;
+package com.odiase.library_management_system.modules.user.entity;
 
 
-import com.odiase.library_management_system.modules.borrowRecord.model.BorrowRecord;
+import com.odiase.library_management_system.modules.borrowRecord.entity.BorrowRecord;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,10 +22,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(length = 15)
     private String phoneNumber;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

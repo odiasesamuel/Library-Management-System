@@ -1,6 +1,6 @@
-package com.odiase.library_management_system.modules.genre.model;
+package com.odiase.library_management_system.modules.genre.entity;
 
-import com.odiase.library_management_system.modules.book.model.Book;
+import com.odiase.library_management_system.modules.book.entity.Book;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +21,7 @@ public class Genre {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "genre_sequence")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,14 +1,14 @@
-package com.odiase.library_management_system.modules.borrowRecord.model;
+package com.odiase.library_management_system.modules.borrowRecord.entity;
 
-import com.odiase.library_management_system.modules.book.model.Book;
-import com.odiase.library_management_system.modules.user.model.User;
+import com.odiase.library_management_system.modules.book.entity.Book;
+import com.odiase.library_management_system.modules.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -23,13 +23,15 @@ public class BorrowRecord {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    private Date borrowDate;
-    private Date returnDate;
+    @Column(nullable = false)
+    private LocalDate borrowDate;
+
+    private LocalDate returnDate;
 }

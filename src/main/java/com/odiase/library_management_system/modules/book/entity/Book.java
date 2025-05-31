@@ -1,7 +1,7 @@
-package com.odiase.library_management_system.modules.book.model;
+package com.odiase.library_management_system.modules.book.entity;
 
-import com.odiase.library_management_system.modules.borrowRecord.model.BorrowRecord;
-import com.odiase.library_management_system.modules.genre.model.Genre;
+import com.odiase.library_management_system.modules.borrowRecord.entity.BorrowRecord;
+import com.odiase.library_management_system.modules.genre.entity.Genre;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,15 +20,18 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_sequence")
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String author;
 
     @ManyToOne
-    @JoinColumn(name = "genre_id")
+    @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
 
-    private String availableCopies;
+    @Column(nullable = false)
+    private Integer availableCopies;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<BorrowRecord> borrowRecords;
