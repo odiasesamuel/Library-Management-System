@@ -10,6 +10,6 @@ public class BookResponseDto {
     private Long id;
     private String title;
     private String author;
-    private Long genreId;   /**  Change Later to Genre Name  **/
+    private Long genreId;
     private Integer availableCopies;
 }
