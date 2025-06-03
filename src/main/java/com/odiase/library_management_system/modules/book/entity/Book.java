@@ -35,4 +35,7 @@ public class Book {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<BorrowRecord> borrowRecords;
+
+    @Version
+    private Long version;
 }

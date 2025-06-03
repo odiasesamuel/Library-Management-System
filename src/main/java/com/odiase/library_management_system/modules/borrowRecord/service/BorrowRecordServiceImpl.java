@@ -13,6 +13,7 @@ import com.odiase.library_management_system.modules.user.entity.User;
 import com.odiase.library_management_system.modules.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,11 +43,16 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
         return borrowRecordMapper.toResponseDtoList(borrowRecords);
     }
 
+    @Transactional
     @Override
     public BorrowRecordResponseDto borrowBook(AddBorrowRecordRequestDto addBorrowRequest) {
         User user = userRepository.findById(addBorrowRequest.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User is not found!"));
 
         Book book = bookRepository.findById(addBorrowRequest.getBookId()).orElseThrow(() -> new ResourceNotFoundException("Book not found!"));
+
+        if (book.getAvailableCopies() <= 0) throw new IllegalStateException("No available copies for this book.");
+        book.setAvailableCopies(book.getAvailableCopies() - 1);
+        bookRepository.save(book);
 
         BorrowRecord borrowRecord = borrowRecordMapper.toEntity(addBorrowRequest, user, book);
         borrowRecord = borrowRecordRepository.save(borrowRecord);
@@ -54,6 +60,7 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
         return borrowRecordMapper.toResponseDto(borrowRecord);
     }
 
+    @Transactional
     @Override
     public BorrowRecordResponseDto returnBook(Long borrowRecordId, UpdateBorrowRecordRequestDto returnBorrowRequest) {
         BorrowRecord borrowRecord = borrowRecordRepository.findById(borrowRecordId).orElseThrow(() -> new ResourceNotFoundException("Borrow Record not found"));
@@ -62,6 +69,8 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
         User user = userRepository.findById(returnBorrowRequest.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User is not found!"));
 
         Book book = bookRepository.findById(returnBorrowRequest.getBookId()).orElseThrow(() -> new ResourceNotFoundException("Book not found!"));
+        book.setAvailableCopies(book.getAvailableCopies() + 1);
+        bookRepository.save(book);
 
         borrowRecord.setUser(user);
         borrowRecord.setBook(book);
@@ -72,8 +81,12 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
     }
 
     @Override
-    public void deleteBrrowRecordById(Long borrowRecordId) {
-        if (!borrowRecordRepository.existsById(borrowRecordId)) throw new ResourceNotFoundException("Borrow record with ID " + borrowRecordId + " not found");
+    public void deleteBorrowRecordById(Long borrowRecordId) {
+
+        BorrowRecord borrowRecord = borrowRecordRepository.findById(borrowRecordId).orElseThrow(() -> new ResourceNotFoundException("Borrow record with ID " + borrowRecordId + " not found"));
+
+        if (borrowRecord.getReturnDate() == null) throw new IllegalStateException("You can't delete record for a book that hasn't been returned");
+
         borrowRecordRepository.deleteById(borrowRecordId);
     }
 }

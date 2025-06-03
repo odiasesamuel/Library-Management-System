@@ -51,7 +51,7 @@ public class BorrowRecordController {
 
     @DeleteMapping("/{recordId}")
     public ResponseEntity<ApiResponse> deleteBrrowRecordById(@PathVariable Long recordId) {
-        borrowRecordService.deleteBrrowRecordById(recordId);
+        borrowRecordService.deleteBorrowRecordById(recordId);
         return ResponseEntity.ok(new ApiResponse("Successfully deleted borrow record", null));
     }
 }

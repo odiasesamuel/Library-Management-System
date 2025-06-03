@@ -13,6 +13,6 @@ public interface BorrowRecordService {
 
     BorrowRecordResponseDto borrowBook(AddBorrowRecordRequestDto addBorrowRequest);
     BorrowRecordResponseDto returnBook(Long borrowRecordId, UpdateBorrowRecordRequestDto returnBorrowRequest);
-    void deleteBrrowRecordById(Long borrowRecordId);
+    void deleteBorrowRecordById(Long borrowRecordId);
 
 }

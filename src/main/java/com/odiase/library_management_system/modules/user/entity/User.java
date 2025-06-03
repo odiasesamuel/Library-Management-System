@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 
 import java.util.List;
 
@@ -25,11 +26,15 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+    @NaturalId
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(length = 15)
     private String phoneNumber;
+
+    @Column(length = 8)
+    private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BorrowRecord> borrowRecords;

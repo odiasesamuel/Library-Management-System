@@ -1,6 +1,7 @@
 package com.odiase.library_management_system.common.exception;
 
 import com.odiase.library_management_system.common.response.ApiResponse;
+import jakarta.persistence.OptimisticLockException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,6 +26,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> handleRescourceNotFound(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(ex.getMessage(), null));
+    }
+
+    @ExceptionHandler(OptimisticLockException.class)
+    public ResponseEntity<ApiResponse> handleOptimisticLockException(OptimisticLockException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse("Conflict: The resource was modified by another transaction. Please try again.", null));
     }
 
     @ExceptionHandler(Exception.class)
