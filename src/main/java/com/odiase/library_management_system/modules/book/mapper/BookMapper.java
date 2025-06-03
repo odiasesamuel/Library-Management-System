@@ -14,7 +14,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-    @Mapping(source = "genre.id", target = "genreId")
+    @Mapping(source = "genre.name", target = "genreName")
     BookResponseDto toResponseDto(Book book);
 
     List<BookResponseDto> toResponseDtoList(List<Book> books);

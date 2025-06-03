@@ -61,7 +61,7 @@ public class BookController {
     @PostMapping()
     public ResponseEntity<ApiResponse> addBook(@Valid @RequestBody AddBookRequestDto addBookRequest) {
         BookResponseDto book = bookService.addBook(addBookRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse("Succesfully added book!", book));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse("Successfully added book!", book));
     }
 
     @PutMapping("/{bookId}")
@@ -73,6 +73,6 @@ public class BookController {
     @DeleteMapping("/{bookId}")
     public ResponseEntity<ApiResponse> deleteBook(@PathVariable Long bookId) {
         bookService.deleteBookById(bookId);
-        return ResponseEntity.ok(new ApiResponse("Sucessfully deleted Book", null));
+        return ResponseEntity.ok(new ApiResponse("Successfully deleted Book", null));
     }
 }

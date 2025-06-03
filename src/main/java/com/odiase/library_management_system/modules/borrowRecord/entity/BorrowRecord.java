@@ -34,4 +34,11 @@ public class BorrowRecord {
     private LocalDate borrowDate;
 
     private LocalDate returnDate;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.borrowDate == null) {
+            this.borrowDate = LocalDate.now();
+        }
+    }
 }
