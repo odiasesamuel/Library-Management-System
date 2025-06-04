@@ -55,9 +55,9 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
         bookRepository.save(book);
 
         BorrowRecord borrowRecord = borrowRecordMapper.toEntity(addBorrowRequest, user, book);
-        borrowRecord = borrowRecordRepository.save(borrowRecord);
+        BorrowRecord savedBorrowRecord = borrowRecordRepository.save(borrowRecord);
 
-        return borrowRecordMapper.toResponseDto(borrowRecord);
+        return borrowRecordMapper.toResponseDto(savedBorrowRecord);
     }
 
     @Transactional
@@ -75,9 +75,9 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
         borrowRecord.setUser(user);
         borrowRecord.setBook(book);
 
-        borrowRecord = borrowRecordRepository.save(borrowRecord);
+        BorrowRecord savedBorrowRecord = borrowRecordRepository.save(borrowRecord);
 
-        return borrowRecordMapper.toResponseDto(borrowRecord);
+        return borrowRecordMapper.toResponseDto(savedBorrowRecord);
     }
 
     @Override

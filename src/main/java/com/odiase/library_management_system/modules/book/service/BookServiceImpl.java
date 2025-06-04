@@ -65,8 +65,8 @@ public class BookServiceImpl implements BookService {
     public BookResponseDto addBook(AddBookRequestDto addBookRequest) {
         Genre genre = genreRepository.findById(addBookRequest.getGenreId()).orElseThrow(() -> new ResourceNotFoundException("Genre not found!"));
         Book book = bookMapper.toEntity(addBookRequest, genre);
-        book = bookRepository.save(book);
-        return bookMapper.toResponseDto(book);
+        Book savedBook = bookRepository.save(book);
+        return bookMapper.toResponseDto(savedBook);
     }
 
     @Override
@@ -77,9 +77,9 @@ public class BookServiceImpl implements BookService {
         Genre genre = genreRepository.findById(updateBookRequest.getGenreId()).orElseThrow(() -> new ResourceNotFoundException("Genre not found!"));
         book.setGenre(genre);
 
-        book = bookRepository.save(book);
+        Book savedBook = bookRepository.save(book);
 
-        return bookMapper.toResponseDto(book);
+        return bookMapper.toResponseDto(savedBook);
     }
 
     @Override

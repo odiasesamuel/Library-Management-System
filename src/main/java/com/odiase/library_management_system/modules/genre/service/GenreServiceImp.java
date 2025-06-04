@@ -27,8 +27,8 @@ public class GenreServiceImp implements GenreService {
     @Override
     public GenreResponseDto addGenre(GenreRequestDto addGenreRequest) {
         Genre genre = genreMapper.toEntity(addGenreRequest);
-        genre = genreRepository.save(genre);
-        return genreMapper.toResponseDto(genre);
+        Genre savedGenre = genreRepository.save(genre);
+        return genreMapper.toResponseDto(savedGenre);
     }
 
     @Override
@@ -36,9 +36,9 @@ public class GenreServiceImp implements GenreService {
         Genre genre = genreRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Genre not found!"));
         genreMapper.updateGenreFromDto(updateGenreRequest, genre);
 
-        genre = genreRepository.save(genre);
+        Genre savedGenre = genreRepository.save(genre);
 
-        return genreMapper.toResponseDto(genre);
+        return genreMapper.toResponseDto(savedGenre);
     }
 
     @Override
