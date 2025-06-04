@@ -7,9 +7,9 @@ import com.odiase.library_management_system.modules.user.dto.response.UserRespon
 import java.util.List;
 
 public interface UserService {
-    UserResponseDto getUserById(Long userId);
     List<UserResponseDto> getAllUser();
+    UserResponseDto getUserById(Long userId);
     UserResponseDto registerUser(RegisterUserRequestDto registerUserRequest);
-    UserResponseDto updateUser(UpdateUserRequestDto updateUserRequest);
+    UserResponseDto updateUser(Long userId, UpdateUserRequestDto updateUserRequest);
     void deleteUserById(Long userId);
 }

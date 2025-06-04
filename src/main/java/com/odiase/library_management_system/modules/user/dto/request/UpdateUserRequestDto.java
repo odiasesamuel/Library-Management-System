@@ -16,10 +16,10 @@ public class UpdateUserRequestDto {
     )
     private String phoneNumber;
 
-    @NotBlank(message = "Password is required")
-    @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
-            message = "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number"
-    )
-    private String password;
+//    @NotBlank(message = "Password is required")
+//    @Pattern(
+//            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
+//            message = "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number"
+//    )
+//    private String password;
 }

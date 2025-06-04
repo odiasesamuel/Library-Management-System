@@ -33,7 +33,7 @@ public class User {
     @Column(length = 15)
     private String phoneNumber;
 
-    @Column(length = 8)
+    @Column(nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
