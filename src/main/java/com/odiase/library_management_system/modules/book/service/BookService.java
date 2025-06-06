@@ -4,13 +4,14 @@ import com.odiase.library_management_system.modules.book.dto.request.AddBookRequ
 import com.odiase.library_management_system.modules.book.dto.request.UpdateBookRequestDto;
 import com.odiase.library_management_system.modules.book.dto.response.BookResponseDto;
 import com.odiase.library_management_system.modules.book.entity.Book;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface BookService {
     BookResponseDto getBookById(Long id);
     BookResponseDto getBookByTitle(String title);
-    List<BookResponseDto> getAllBooks();
+    Page<BookResponseDto> getAllBooks(Integer page, Integer size, String sortBy, String sortDir);
     List<BookResponseDto> getBooksByAuthor(String author);
     List<BookResponseDto> getBooksByGenreId(Long genreId);
     List<BookResponseDto> getAvailableBooks();

@@ -1,6 +1,7 @@
 package com.odiase.library_management_system.modules.borrowRecord.service;
 
 import com.odiase.library_management_system.common.exception.ResourceNotFoundException;
+import com.odiase.library_management_system.common.util.PaginationUtils;
 import com.odiase.library_management_system.modules.book.entity.Book;
 import com.odiase.library_management_system.modules.book.repository.BookRepository;
 import com.odiase.library_management_system.modules.borrowRecord.dto.request.AddBorrowRecordRequestDto;
@@ -12,6 +13,7 @@ import com.odiase.library_management_system.modules.borrowRecord.repository.Borr
 import com.odiase.library_management_system.modules.user.entity.User;
 import com.odiase.library_management_system.modules.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +28,13 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
     private final BorrowRecordMapper borrowRecordMapper;
 
     @Override
-    public List<BorrowRecordResponseDto> getAllBorrowRecords() {
-        List<BorrowRecord> borrowRecords = borrowRecordRepository.findAll();
-        return borrowRecordMapper.toResponseDtoList(borrowRecords);
+    public Page<BorrowRecordResponseDto> getAllBorrowRecords(Integer page, Integer size, String sortBy, String sortDir) {
+        Pageable pageable = PaginationUtils.createPageRequest(page, size, sortBy, sortDir);
+
+        Page<BorrowRecord> borrowRecordPage = borrowRecordRepository.findAll(pageable);
+        List<BorrowRecordResponseDto> content = borrowRecordMapper.toResponseDtoList(borrowRecordPage.getContent());
+
+        return new PageImpl<>(content, pageable, borrowRecordPage.getTotalElements());
     }
 
     @Override

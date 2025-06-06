@@ -1,14 +1,15 @@
 package com.odiase.library_management_system.modules.book.controller;
 
-import com.odiase.library_management_system.common.exception.ResourceNotFoundException;
+import com.odiase.library_management_system.common.dto.response.PagedResponse;
 import com.odiase.library_management_system.common.response.ApiResponse;
+import com.odiase.library_management_system.common.util.PaginationUtils;
 import com.odiase.library_management_system.modules.book.dto.request.AddBookRequestDto;
 import com.odiase.library_management_system.modules.book.dto.request.UpdateBookRequestDto;
 import com.odiase.library_management_system.modules.book.dto.response.BookResponseDto;
-import com.odiase.library_management_system.modules.book.entity.Book;
 import com.odiase.library_management_system.modules.book.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +23,24 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping()
-    public ResponseEntity<ApiResponse> getAllBooks() {
-        List<BookResponseDto> books = bookService.getAllBooks();
-        return ResponseEntity.ok(new ApiResponse("success", books));
+    public ResponseEntity<ApiResponse> getAllBooks(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir
+    ) {
+        Integer adjustedPage = PaginationUtils.toZeroBasedPage(page);
+
+        Page<BookResponseDto> booksPage = bookService.getAllBooks(adjustedPage, size, sortBy, sortDir);
+        PagedResponse<BookResponseDto> response = new PagedResponse<>(
+                booksPage.getContent(),
+                booksPage.getNumber() + 1,
+                booksPage.getSize(),
+                booksPage.getTotalElements(),
+                booksPage.getTotalPages(),
+                booksPage.isLast()
+        );
+        return ResponseEntity.ok(new ApiResponse("success", response));
     }
 
     @GetMapping("/{bookId}")

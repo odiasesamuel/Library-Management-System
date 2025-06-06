@@ -1,6 +1,7 @@
 package com.odiase.library_management_system.modules.book.service;
 
 import com.odiase.library_management_system.common.exception.ResourceNotFoundException;
+import com.odiase.library_management_system.common.util.PaginationUtils;
 import com.odiase.library_management_system.modules.book.dto.request.AddBookRequestDto;
 import com.odiase.library_management_system.modules.book.dto.request.UpdateBookRequestDto;
 import com.odiase.library_management_system.modules.book.dto.response.BookResponseDto;
@@ -10,6 +11,7 @@ import com.odiase.library_management_system.modules.book.repository.BookReposito
 import com.odiase.library_management_system.modules.genre.entity.Genre;
 import com.odiase.library_management_system.modules.genre.repository.GenreRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,9 +36,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookResponseDto> getAllBooks() {
-        List<Book> books = bookRepository.findAll();
-        return bookMapper.toResponseDtoList(books);
+    public Page<BookResponseDto> getAllBooks(Integer page, Integer size, String sortBy, String sortDir) {
+        Pageable pageable = PaginationUtils.createPageRequest(page, size, sortBy, sortDir);
+
+        Page<Book> bookPage = bookRepository.findAll(pageable);
+        List<BookResponseDto> content = bookMapper.toResponseDtoList(bookPage.getContent());
+
+        return new PageImpl<>(content, pageable, bookPage.getTotalElements());
     }
 
     @Override
