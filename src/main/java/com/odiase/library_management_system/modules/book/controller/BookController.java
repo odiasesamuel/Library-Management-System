@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -74,18 +75,21 @@ public class BookController {
         return ResponseEntity.ok(new ApiResponse("success", books));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping()
     public ResponseEntity<ApiResponse> addBook(@Valid @RequestBody AddBookRequestDto addBookRequest) {
         BookResponseDto book = bookService.addBook(addBookRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse("Successfully added book!", book));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{bookId}")
     public ResponseEntity<ApiResponse> updateBook(@PathVariable Long bookId, @Valid @RequestBody UpdateBookRequestDto updateBookRequest) {
         BookResponseDto book = bookService.updateBook(bookId, updateBookRequest);
         return ResponseEntity.ok(new ApiResponse("Successfully updated book", book));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{bookId}")
     public ResponseEntity<ApiResponse> deleteBook(@PathVariable Long bookId) {
         bookService.deleteBookById(bookId);

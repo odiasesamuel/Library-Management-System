@@ -3,6 +3,7 @@ package com.odiase.library_management_system.modules.user.service;
 import com.odiase.library_management_system.modules.user.dto.request.RegisterUserRequestDto;
 import com.odiase.library_management_system.modules.user.dto.request.UpdateUserRequestDto;
 import com.odiase.library_management_system.modules.user.dto.response.UserResponseDto;
+import com.odiase.library_management_system.modules.user.entity.User;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface UserService {
     UserResponseDto registerUser(RegisterUserRequestDto registerUserRequest);
     UserResponseDto updateUser(Long userId, UpdateUserRequestDto updateUserRequest);
     void deleteUserById(Long userId);
+
+    User getAuthenticatedUser();
 }

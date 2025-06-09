@@ -16,4 +16,6 @@ public interface BorrowRecordService {
     BorrowRecordResponseDto returnBook(Long borrowRecordId, UpdateBorrowRecordRequestDto returnBorrowRequest);
     void deleteBorrowRecordById(Long borrowRecordId);
 
+    boolean isOwner(Long recordId, Long userId);
+
 }

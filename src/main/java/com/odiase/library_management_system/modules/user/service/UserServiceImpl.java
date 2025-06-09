@@ -9,6 +9,10 @@ import com.odiase.library_management_system.modules.user.entity.User;
 import com.odiase.library_management_system.modules.user.mapper.UserMapper;
 import com.odiase.library_management_system.modules.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +22,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserResponseDto> getAllUser() {
@@ -35,7 +40,10 @@ public class UserServiceImpl implements UserService{
     public UserResponseDto registerUser(RegisterUserRequestDto registerUserRequest) {
         if (userRepository.existsByEmail(registerUserRequest.getEmail())) throw new AlreadyExistsException("Oops! " + registerUserRequest.getEmail() + " already exists!");
         User user = userMapper.toEntity(registerUserRequest);
+
         /* Encode Password before saving to db */
+        user.setPassword(passwordEncoder.encode(registerUserRequest.getPassword()));
+
        User savedUser = userRepository.save(user);
         return userMapper.toResponseDto(savedUser);
     }
@@ -54,5 +62,13 @@ public class UserServiceImpl implements UserService{
         if(!userRepository.existsById(userId)) throw new ResourceNotFoundException("User with ID " + userId + " not found");
 
         userRepository.deleteById(userId);
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+        return user;
     }
 }

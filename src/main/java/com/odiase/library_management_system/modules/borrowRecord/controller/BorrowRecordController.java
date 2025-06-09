@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.List;
 public class BorrowRecordController {
     private final BorrowRecordService borrowRecordService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping()
     public ResponseEntity<ApiResponse> getAllBorrowRecords(
             @RequestParam(defaultValue = "1") Integer page,
@@ -45,12 +47,14 @@ public class BorrowRecordController {
         return ResponseEntity.ok(new ApiResponse("Successfully fetched all books borrowed records", response));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/book/{bookId}")
     public ResponseEntity<ApiResponse> getBorrowRecordsByBookId(@PathVariable Long bookId) {
         List<BorrowRecordResponseDto> borrowRecord = borrowRecordService.getBorrowRecordsByBookId(bookId);
         return ResponseEntity.ok(new ApiResponse("Successfully fetched borrowed records for book ID " + bookId, borrowRecord));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #userId == authentication.principal.id")
     @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse> getBorrowRecordsByUserId(@PathVariable Long userId) {
         List<BorrowRecordResponseDto> borrowRecord = borrowRecordService.getBorrowRecordsByUserId(userId);
@@ -63,12 +67,14 @@ public class BorrowRecordController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse("Successfully borrowed book!", borrowRecord));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @borrowRecordServiceImpl.isOwner(#recordId, authentication.principal.id)")
     @PutMapping("/{recordId}")
     public ResponseEntity<ApiResponse> returnBook(@PathVariable Long recordId, @Valid @RequestBody UpdateBorrowRecordRequestDto returnBorrowRequest) {
         BorrowRecordResponseDto borrowRecord = borrowRecordService.returnBook(recordId, returnBorrowRequest);
         return ResponseEntity.ok(new ApiResponse("Successfully returned books", borrowRecord));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{recordId}")
     public ResponseEntity<ApiResponse> deleteBrrowRecordById(@PathVariable Long recordId) {
         borrowRecordService.deleteBorrowRecordById(recordId);

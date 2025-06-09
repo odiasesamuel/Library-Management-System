@@ -5,6 +5,7 @@ import com.odiase.library_management_system.modules.user.dto.request.UpdateUserR
 import com.odiase.library_management_system.modules.user.dto.response.UserResponseDto;
 import com.odiase.library_management_system.modules.user.entity.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public interface UserMapper {
 
     List<UserResponseDto> toResponseDtoList(List<User> users);
 
+    @Mapping(target = "password", ignore = true)
     User toEntity(RegisterUserRequestDto registerUserRequest);
 
     void updateUserFromDto(UpdateUserRequestDto updateUserRequest, @MappingTarget User user);
