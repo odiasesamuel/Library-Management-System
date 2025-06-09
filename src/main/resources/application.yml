@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: library-management-system
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: ${SHOW_SQL:false}
+    hibernate:
+      ddl-auto: validate
+
+server:
+  port: ${PORT:8080}
+
+api:
+  prefix: /api/v1
+
+auth:
+  token:
+    expirationInMils: 72000000
+    jwtSecret: ${JWT_SECRET}
