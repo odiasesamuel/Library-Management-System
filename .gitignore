@@ -48,8 +48,11 @@ build/
 *.war
 docker-compose.override.yml
 docker.env
-.env
 .dockerignore
+
+# Environment variables
+.env
+.env.*
 
 # OS-generated files
 .DS_Store
